@@ -1,7 +1,13 @@
 import sqlite3
+import os
+
+# Create constants depending on the absolute file location for increased dynamic
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+DATABASE_NAME = "main_match_database.db"
+FINAL_PATH = PROJECT_PATH + "\\" + DATABASE_NAME
 
 # Connect to sqlite main database
-conn = sqlite3.connect("main_match_database.db")
+conn = sqlite3.connect(FINAL_PATH)
 cursor = conn.cursor()
 
 # Create tables
