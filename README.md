@@ -24,4 +24,5 @@ ASSUMPTIONS:
 3. The creation of databases that store the teams, the result of each game and the stage a match is played in are also useful, since it contributes to the scalability (add more teams and different stages).
 4. Another database regarding the different stadiums would also be important in the final app, but since the value is always NULL in the JSON file, I left it out until this point.
 5. Although there was no specific task to insert the JSON file data into the database, I found it very useful to have this file to see a possible structure. In addition to that, I thought it might be helpful to see the actual data in the database and eventually on the HTML page. That's why I decided to write a script for the import.
+6. I added a form to add a new event. The home team, the away team, the date and the time are required fields. The default value for the season (if nothing is added via the form) is the current year.
    
