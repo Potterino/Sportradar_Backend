@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar Styling */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">Home</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Matches</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1>Match Viewer</h1>
+        <form method="POST">
+            <label for="season">Season:</label>
+            <input type="text" id="season" name="season" value="{{ filters.season or '' }}">
+
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">All</option>
+                <option value="played" {% if filters.get('status') == 'played' %}selected{% endif %}>Played</option>
+                <option value="scheduled" {% if filters.get('status') == 'scheduled' %}selected{% endif %}>Scheduled</option>
+            </select>
+
+            <label for="team_name">Team Name:</label>
+            <input type="text" id="team_name" name="team_name" value="{{ filters.team_name or '' }}">
+
+            <button type="submit">Filter</button>
+        </form>
+
+
+        <!-- Matches Table -->
+        {% if matches %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Home Team</th>
+                    <th>Away Team</th>
+                    <th>Home Goals</th>
+                    <th>Away Goals</th>
+                    <th>Winner</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for match in matches %}
+                <tr>
+                    <td>{{ match[0] }}</td>
+                    <td>{{ match[1] }}</td>
+                    <td>{{ match[2] }}</td>
+                    <td>{{ match[3] }}</td>
+                    <td>{{ match[4] }}</td>
+                    <td>{{ match[5] }}</td>
+                    <td>{{ match[6] }}</td>
+                    <td>{{ match[7] }}</td>
+                    <td>{{ match[8] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No matches found.</p>
+        {% endif %}
+    </div>
+
+
+           <!-- Form to add a new event -->
+    <div class="container">
+        <h2>Add New Event</h2>
+        <form method="POST" action="/add-event">
+            <ul class="list style">
+                <li>
+                    <label for="home_team">Home Team Name:</label>
+                        <select id="home_team_name_add" name="home_team_name_add" required>
+                            <option value="">All</option>
+                            {% for team in teams %}
+                            <option value="{{ team }}" {% if filters.team_name == team %}selected{% endif %}>{{ team }}</option>
+                            {% endfor %}
+                        </select>
+                </li>
+
+                <li>
+                    <label for="away_team">Away Team Name:</label>
+                        <select id="away_team_name_add" name="away_team_name_add" required>
+                            <option value="">All</option>
+                            {% for team in teams %}
+                            <option value="{{ team }}" {% if filters.team_name == team %}selected{% endif %}>{{ team }}</option>
+                            {% endfor %}
+                        </select>
+                </li>
+                <li>
+                    <label for="date_venue">Date Venue (YYYY-MM-DD):</label>
+                    <input type="date" id="date_venue" name="date_venue" required>
+                </li>
+                <li>
+                    <label for="time_venue">Time Venue (HH:MM):</label>
+                    <input type="time" id="time_venue" name="time_venue" required>
+                </li>
+                    <!-- Optionale Felder -->
+                <li>
+                    <label for="season">Season:</label>
+                    <input type="number" id="season_add" name="season_add">
+                </li>
+                <li>
+                    <label for="stadium">Stadium:</label>
+                    <input type="text" id="stadium" name="stadium">
+                </li>
+                    <label for="originCompetitionId">Origin Competition ID:</label>
+                    <input type="text" id="originCompetitionId" name="originCompetitionId">
+                <li>
+                    <label for="originCompetitionName">Origin Competition Name:</label>
+                    <input type="text" id="originCompetitionName" name="originCompetitionName">
+                </li>
+                <li>
+                    <button type="submit">Add Event</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</body>
+</html>
